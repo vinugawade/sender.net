@@ -1,7 +1,7 @@
 sender_net.settings_form:
   path: '/admin/config/system/sender-net'
   defaults:
-    _title: 'Sender.net settings'
+    _title: 'Sender.net Settings'
     _form: 'Drupal\sender_net\Form\SettingsForm'
   requirements:
     _permission: 'administer sender_net configuration'

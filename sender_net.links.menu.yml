@@ -1,5 +1,5 @@
 sender_net.settings_form:
-  title: 'Sender.net'
+  title: 'Sender.net Settings'
   description: 'Configure sender.net.'
   parent: system.admin_config_system
   route_name: sender_net.settings_form
