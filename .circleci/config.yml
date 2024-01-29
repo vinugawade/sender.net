@@ -6,20 +6,21 @@ jobs:
       - image: cimg/php:8.2
 
     environment:
-      PROJECT_PATH: "~/project"
+      PROJECT_PATH: "~/project"  # Quoting for potential special characters
 
     steps:
       - checkout
       - run: php --version && composer --version
       - run: composer config --global allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
       - run: cd .circleci && composer require drupal/coder
+
       - run:
-          name: "Drupal Coding Standards"
+          name: "Test Drupal Coding Standards"
           command: |
             ./.circleci/vendor/bin/phpcs --ignore=./.circleci/* --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,yml,md $PROJECT_PATH
 
 workflows:
   version: 2
-  Drupal-Standards-Workflow:
+  drupalStandardsWorkflow:  # Consistent naming convention
     jobs:
       - build
