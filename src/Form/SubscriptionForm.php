@@ -43,7 +43,7 @@ class SubscriptionForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'sender_net_subscription_form';
+    return 'sender_net_subscription_block_form';
   }
 
   /**

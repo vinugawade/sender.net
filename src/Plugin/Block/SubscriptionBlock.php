@@ -11,8 +11,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides an Subscription block.
  *
  * @Block(
- *   id = "sender_net_subscription",
- *   admin_label = @Translation("Sender.net Subscription"),
+ *   id = "sender_net_subscription_block",
+ *   admin_label = @Translation("Sender.net Subscription Block"),
  *   category = @Translation("sender_net")
  * )
  */
