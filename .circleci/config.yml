@@ -4,16 +4,19 @@ jobs:
   build:
     docker:
       - image: cimg/php:8.2
+
+    environment:
+      PROJECT_PATH: "~/project"
+
     steps:
       - checkout
-      - run: php --version
-      - run: composer --version
+      - run: php --version && composer --version
       - run: composer config --global allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
       - run: cd .circleci && composer require drupal/coder
       - run:
           name: "Drupal Coding Standards"
           command: |
-            ./.circleci/vendor/bin/phpcs --ignore=./.circleci/* --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,yml,md ~/project
+            ./.circleci/vendor/bin/phpcs --ignore=./.circleci/* --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,yml,md $PROJECT_PATH
 
 workflows:
   version: 2
