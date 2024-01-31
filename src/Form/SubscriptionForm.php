@@ -2,6 +2,7 @@
 
 namespace Drupal\sender_net\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -28,16 +29,26 @@ class SubscriptionForm extends FormBase {
   protected $entityTypeManager;
 
   /**
+   * Configuration manager.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $config;
+
+  /**
    * Load services.
    *
    * @param \Drupal\sender_net\SenderNetApi $senderApi
    *   The sender.net API service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The configuration manager service.
    */
-  public function __construct(SenderNetApi $senderApi, EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(SenderNetApi $senderApi, EntityTypeManagerInterface $entityTypeManager, ConfigFactoryInterface $configFactory) {
     $this->senderApi = $senderApi;
     $this->entityTypeManager = $entityTypeManager;
+    $this->config = $configFactory->get('sender_net.settings');
   }
 
   /**
@@ -45,9 +56,9 @@ class SubscriptionForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      // Load the service required to construct this class.
       $container->get('sender_net.api'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('config.factory')
     );
   }
 
@@ -88,9 +99,12 @@ class SubscriptionForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    // Get `user_group` value.
+    $user_group = $this->config->get('user_group');
     $email = $form_state->getValue('email');
     $param = [
       'email' => $email,
+      'groups' => $user_group,
     ];
 
     // Check if a user account exists with the provided email.

@@ -104,7 +104,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
       '#type' => 'checkboxes',
       '#title' => $this->t('Select Groups'),
       '#options' => $this->loadGroupsOptions($apiKey),
-      '#default_value' => $group ?? [],
+      '#default_value' => $group ?: [],
       '#sort_options' => TRUE,
       '#description' => $this->t('List of all <a href="https://app.sender.net/subscribers/tags" target="_blank">groups</a> in your sender.net account.'),
       '#required' => FALSE,
@@ -142,7 +142,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
     $this->config('sender_net.settings')
       ->set('api_access_tokens', $form_state->getValue('api_access_tokens'))
       ->set('api_base_url', $form_state->getValue('api_base_url'))
-      ->set('user_group', $form_state->getValue('user_group'))
+      ->set('user_group', array_filter($form_state->getValue('user_group')))
       ->save();
     parent::submitForm($form, $form_state);
   }
