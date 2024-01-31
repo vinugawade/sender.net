@@ -167,15 +167,33 @@ class SenderNetApi {
   public function getApiHeader() {
     // Get the value of the config variable `api_access_tokens`.
     $token = $this->config->get('api_access_tokens');
-    if (!empty($token)) {
-      return [
-        'Authorization' => 'Bearer ' . $token,
-        'Content-Type' => 'application/json',
-        'Accept' => 'application/json',
-      ];
+
+    return [
+      'Authorization' => 'Bearer ' . $token,
+      'Content-Type' => 'application/json',
+      'Accept' => 'application/json',
+    ];
+  }
+
+  /**
+   * Test the validity of the API key by making a request to a sample endpoint.
+   *
+   * @throws \Exception
+   */
+  public function checkApiKey($api_key) {
+    // Make a request to a sample endpoint to test the API key.
+    $response = $this->makeApiRequest('campaigns', 'GET', [], [
+      'Authorization' => 'Bearer ' . $api_key,
+      'Content-Type' => 'application/json',
+      'Accept' => 'application/json',
+    ]);
+
+    // Check if the response indicates an authentication issue.
+    if ($response && $response->getStatusCode() === 200) {
+      return TRUE;
     }
     else {
-      return NULL;
+      return FALSE;
     }
   }
 
