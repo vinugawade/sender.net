@@ -220,20 +220,9 @@ class SenderNetApi {
       return $this->client->request($method, $url, ['headers' => $headers, 'json' => $data]);
     }
     catch (\Throwable $th) {
-      $this->addError($th->getMessage());
       $this->logger->get('sender_net')->error($th->getMessage());
       return NULL;
     }
-  }
-
-  /**
-   * Helper function to add error messages to the messenger.
-   *
-   * @param string $message
-   *   The error message to display.
-   */
-  protected function addError($message) {
-    $this->messenger->addError($message);
   }
 
 }
