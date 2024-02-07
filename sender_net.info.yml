@@ -3,3 +3,4 @@ type: module
 description: Integration with sender.net email marketing service
 package: Sender.net
 core_version_requirement: ^9 || ^10
+configure: sender_net.settings_form
