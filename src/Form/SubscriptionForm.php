@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\sender_net\SenderNetApi;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -15,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SubscriptionForm extends FormBase {
 
   /**
-   * Get sender.net API service.
+   * Sender.net API service.
    *
    * @var \Drupal\sender_net\SenderNetApi
    */
@@ -36,7 +37,14 @@ class SubscriptionForm extends FormBase {
   protected $config;
 
   /**
-   * Load services.
+   * Logger channel factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected $logger;
+
+  /**
+   * Constructs a SubscriptionForm object.
    *
    * @param \Drupal\sender_net\SenderNetApi $senderApi
    *   The sender.net API service.
@@ -44,11 +52,19 @@ class SubscriptionForm extends FormBase {
    *   The entity type manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The configuration manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
+   *   The logger channel factory service.
    */
-  public function __construct(SenderNetApi $senderApi, EntityTypeManagerInterface $entityTypeManager, ConfigFactoryInterface $configFactory) {
+  public function __construct(
+    SenderNetApi $senderApi,
+    EntityTypeManagerInterface $entityTypeManager,
+    ConfigFactoryInterface $configFactory,
+    LoggerChannelFactoryInterface $loggerFactory
+  ) {
     $this->senderApi = $senderApi;
     $this->entityTypeManager = $entityTypeManager;
     $this->config = $configFactory->get('sender_net.settings');
+    $this->logger = $loggerFactory->get('sender_net');
   }
 
   /**
@@ -58,7 +74,8 @@ class SubscriptionForm extends FormBase {
     return new static(
       $container->get('sender_net.api'),
       $container->get('entity_type.manager'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('logger.factory')
     );
   }
 
@@ -123,7 +140,7 @@ class SubscriptionForm extends FormBase {
       $msg = $this->t("Subscriber with email '@email' already exists.", ['@email' => $email]);
 
       // Subscriber already exists.
-      // $this->logger->get('sender_net')->info($msg);
+      $this->logger->info($msg);
       $this->messenger()->addStatus($msg);
     }
     else {
