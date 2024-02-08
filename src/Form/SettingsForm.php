@@ -49,7 +49,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
   public function __construct(SenderNetApi $senderApi, MessengerInterface $messenger, LoggerChannelFactoryInterface $logger) {
     $this->senderApi = $senderApi;
     $this->messenger = $messenger;
-    $this->logger = $logger;
+    $this->logger = $logger->get('sender_net');
   }
 
   /**
@@ -177,7 +177,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
       }
       catch (\Exception $e) {
         $this->messenger->addError($this->t('Unable to load groups. Please check your API access token and try again.'));
-        $this->logger->get('sender_net')->error('Error loading groups: @error', ['@error' => $e->getMessage()]);
+        $this->logger->error('Error loading groups: @error', ['@error' => $e->getMessage()]);
       }
     }
     return $options;

@@ -80,7 +80,7 @@ class SenderNetApi {
     $this->messenger = $messenger;
     $this->userStorage = $entity_type_manager->getStorage('user');
     $this->client = $client;
-    $this->logger = $logger;
+    $this->logger = $logger->get('sender_net');
     $this->configFactory = $config_factory;
     $this->config = $this->configFactory->getEditable('sender_net.settings');
   }
@@ -109,7 +109,7 @@ class SenderNetApi {
     $response = $this->makeApiRequest('subscribers', 'POST', $param, $header);
 
     if ($response && $this->isSuccessResponse($response)) {
-      $this->logger->get('sender_net')->info("@email email is subscribed.", ['@email' => $param['email']]);
+      $this->logger->info("@email email is subscribed.", ['@email' => $param['email']]);
       return TRUE;
     }
 
@@ -246,7 +246,7 @@ class SenderNetApi {
       return $this->client->request($method, $url, ['headers' => $headers, 'json' => $data]);
     }
     catch (\Throwable $th) {
-      $this->logger->get('sender_net')->error($th->getMessage());
+      $this->logger->error($th->getMessage());
       return NULL;
     }
   }
