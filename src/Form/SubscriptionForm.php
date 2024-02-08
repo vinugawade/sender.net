@@ -117,12 +117,23 @@ class SubscriptionForm extends FormBase {
       $param['lastname'] = '';
     }
 
-    // Proceed with subscription.
-    $result = $this->senderApi->createSubscriber($param);
+    // Check if subscriber already exists.
+    $existingSubscriber = $this->senderApi->getSubscriberByEmail($email);
+    if ($existingSubscriber) {
+      $msg = $this->t("Subscriber with email '@email' already exists.", ['@email' => $email]);
 
-    // Status message after the API call.
-    if ($result) {
-      $this->messenger()->addStatus($this->t("@email email is subscribed.", ['@email' => $email]));
+      // Subscriber already exists.
+      // $this->logger->get('sender_net')->info($msg);
+      $this->messenger()->addStatus($msg);
+    }
+    else {
+      // Proceed with subscription.
+      $result = $this->senderApi->createSubscriber($param);
+
+      // Status message after the API call.
+      if ($result) {
+        $this->messenger()->addStatus($this->t("@email email is subscribed.", ['@email' => $email]));
+      }
     }
   }
 

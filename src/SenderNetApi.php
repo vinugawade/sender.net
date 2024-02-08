@@ -117,6 +117,32 @@ class SenderNetApi {
   }
 
   /**
+   * Get subscriber by email.
+   *
+   * @param string $email
+   *   The email address of the subscriber.
+   *
+   * @return array|null
+   *   The subscriber data if found, NULL otherwise.
+   */
+  public function getSubscriberByEmail($email) {
+    // API call to retrieve subscriber by email.
+    $header = $this->getApiHeader();
+    if (empty($header)) {
+      throw new \Exception('API settings are not set.');
+    }
+
+    $response = $this->makeApiRequest('subscribers/' . $email, 'GET', [], $header);
+
+    if ($response && $this->isSuccessResponse($response)) {
+      // Subscriber found.
+      return json_decode($response->getBody()->getContents(), TRUE);
+    }
+
+    return NULL;
+  }
+
+  /**
    * List all groups.
    *
    * @see https://api.sender.net/groups/list-all/
