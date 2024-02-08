@@ -140,8 +140,8 @@ class SubscriptionForm extends FormBase {
       $msg = $this->t("Subscriber with email '@email' already exists.", ['@email' => $email]);
 
       // Subscriber already exists.
-      $this->logger->info($msg);
-      $this->messenger()->addStatus($msg);
+      // $this->logger->get('sender_net')->info($msg);
+      $this->messenger()->addError($msg);
     }
     else {
       // Proceed with subscription.
