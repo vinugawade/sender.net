@@ -15,7 +15,7 @@ This module facilitates the integration of Drupal with the [Sender.net](https://
 
 ## Requirements
 
-- A [Sender.net](https://auth.sender.net/oauth/login) account
+- A [sender.net](https://auth.sender.net/oauth/login) account
 - [API access tokens](https://app.sender.net/settings/tokens) for your sender.net account
 
 ## Recommended Modules
@@ -28,12 +28,12 @@ There are no additional recommended modules required.
  your Drupal installation's module directory.
 2. Navigate to `Administration > Extend` and install the module.
 
-For more information, refer to [Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
+For more information, refer to the [Drupal documentation on installing modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
 
 ## Configuration
 
-1. Obtain [API access tokens](https://app.sender.net/settings/tokens) from your [Sender.net](https://auth.sender.net/oauth/login) account and set them in the module's settings at `Configuration > System > Sender.net`.
-2. Set up the `Base URL` from the [API documentation](https://api.sender.net).
+1. Obtain your [API access tokens](https://app.sender.net/settings/tokens) from your [sender.net](https://auth.sender.net/oauth/login) account and set them in the module's settings at `Configuration > System > Sender.net`.
+2. Set up the `Base URL` from the [sender.net API documentation](https://api.sender.net).
 3. Choose any available group if desired, and save the configuration.
 4. Visit `Structure > Block Layout` to place the `Sender.net Subscription Block`
 in the desired region.
