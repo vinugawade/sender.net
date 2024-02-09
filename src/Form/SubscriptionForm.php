@@ -52,19 +52,19 @@ class SubscriptionForm extends FormBase {
    *   The entity type manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The configuration manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger channel factory service.
    */
   public function __construct(
     SenderNetApi $senderApi,
     EntityTypeManagerInterface $entityTypeManager,
     ConfigFactoryInterface $configFactory,
-    LoggerChannelFactoryInterface $loggerFactory
+    LoggerChannelFactoryInterface $logger
   ) {
     $this->senderApi = $senderApi;
     $this->entityTypeManager = $entityTypeManager;
     $this->config = $configFactory->get('sender_net.settings');
-    $this->logger = $loggerFactory->get('sender_net');
+    $this->logger = $logger->get('sender_net');
   }
 
   /**
@@ -140,7 +140,7 @@ class SubscriptionForm extends FormBase {
       $msg = $this->t("Subscriber with email '@email' already exists.", ['@email' => $email]);
 
       // Subscriber already exists.
-      // $this->logger->get('sender_net')->info($msg);
+      $this->logger->warning($msg);
       $this->messenger()->addError($msg);
     }
     else {
