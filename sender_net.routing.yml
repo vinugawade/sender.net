@@ -4,4 +4,4 @@ sender_net.settings_form:
     _title: 'Sender.net Settings'
     _form: 'Drupal\sender_net\Form\SettingsForm'
   requirements:
-    _permission: 'administer sender_net configuration'
+    _permission: 'administer site configuration'
