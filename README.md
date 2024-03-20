@@ -1,6 +1,6 @@
 # Sender.net Integration Module
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/vinugawade/sender.net/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/vinugawade/sender.net/tree/master)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/vinugawade/sender_net/tree/1.x.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/vinugawade/sender_net/tree/1.x)
 
 This module facilitates the integration of Drupal with the [Sender.net](https://www.sender.net) service.
 
