@@ -243,7 +243,10 @@ class SenderNetApi {
     $url = $base_url . $endpoint;
 
     try {
-      return $this->client->request($method, $url, ['headers' => $headers, 'json' => $data]);
+      return $this->client->request($method, $url, [
+        'headers' => $headers,
+        'json' => $data,
+      ]);
     }
     catch (\Throwable $th) {
       $this->logger->error($th->getMessage());
