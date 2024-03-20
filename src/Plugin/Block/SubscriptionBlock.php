@@ -26,7 +26,7 @@ class SubscriptionBlock extends BlockBase implements ContainerFactoryPluginInter
   protected $formBuilder;
 
   /**
-   * Load services.
+   * Constructs a new SubscriptionBlock object.
    *
    * @param array $configuration
    *   The configuration.
