@@ -6,25 +6,38 @@ jobs:
       - image: cimg/php:8.2
 
     environment:
-      PROJECT_PATH: "~/project"  # Set the project path (quoting for potential special characters)
+      PROJECT_PATH: "~/project"  # Define the project path for analysis
 
     steps:
       - checkout  # Checkout the source code from the repository
 
-      - run: php --version && composer --version  # Display PHP and Composer versions
-
-      - run: composer --global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true  # Configure Composer for PHP CodeSniffer
-
-      - run: cd .circleci && composer require drupal/coder -vvv  # Install Drupal Coder using Composer
+      - run:
+          name: "Display PHP and Composer Versions"
+          command: |
+            php --version
+            composer --version
 
       - run:
-          name: "Configure Drupal Coding Standards"
+          name: "Configure Composer for PHP CodeSniffer"
           command: |
-            ./.circleci/vendor/bin/phpcs --ignore=./.circleci/* --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,yml,md $PROJECT_PATH
-          # Run PHP CodeSniffer with Drupal coding standards on the specified project path
+            composer --global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+
+      - run:
+          name: "Install Drupal Coder"
+          command: |
+            composer require drupal/coder --working-dir=.circleci -vvv
+
+      - run:
+          name: "Run Drupal Coding Standards Check"
+          command: |
+            ./.circleci/vendor/bin/phpcs \
+              --ignore=./.circleci/* \
+              --standard=Drupal,DrupalPractice \
+              --extensions=php,module,inc,install,test,profile,theme,css,info,yml,md \
+              $PROJECT_PATH
 
 workflows:
   version: 2
-  drupalStandardsWorkflow:  # Define the workflow
+  drupal_standards_workflow:
     jobs:
-      - build  # Include the 'build' job in the workflow
+      - build
