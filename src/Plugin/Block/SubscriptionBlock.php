@@ -8,18 +8,18 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides an Subscription block.
+ * Provides a Subscription block.
  *
  * @Block(
  *   id = "sender_net_subscription_block",
  *   admin_label = @Translation("Sender.net Subscription Block"),
- *   category = @Translation("sender_net")
+ *   category = @Translation("Sender.net")
  * )
  */
 class SubscriptionBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Get FormBuilder service.
+   * The FormBuilder service.
    *
    * @var \Drupal\Core\Form\FormBuilderInterface
    */
@@ -31,7 +31,7 @@ class SubscriptionBlock extends BlockBase implements ContainerFactoryPluginInter
    * @param array $configuration
    *   The configuration.
    * @param string $plugin_id
-   *   The plugin id.
+   *   The plugin ID.
    * @param mixed $plugin_definition
    *   The plugin definition.
    * @param \Drupal\Core\Form\FormBuilderInterface $formBuilder
@@ -46,7 +46,6 @@ class SubscriptionBlock extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    // Load the service required to construct this class.
     return new static(
       $configuration,
       $plugin_id,
@@ -59,7 +58,10 @@ class SubscriptionBlock extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function build() {
-    return $this->formBuilder->getForm('Drupal\sender_net\Form\SubscriptionForm');
+    return [
+      '#theme' => 'block_subscription',
+      '#form' => $this->formBuilder->getForm('Drupal\\sender_net\\Form\\SubscriptionForm'),
+    ];
   }
 
 }

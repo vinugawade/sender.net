@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Sender.net module implementation.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function sender_net_theme() {
+  return [
+    'block_subscription' => [
+      'variables' => [
+        'form' => NULL,
+      ],
+      'template' => 'block--subscription',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_help().
+ */
+function sender_net_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.sender_net':
+      return '<p>' . t('The Sender.net module provides email subscription functionality, including a block that allows users to subscribe via a simple form.') . '</p>';
+  }
+}
