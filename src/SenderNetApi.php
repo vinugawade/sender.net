@@ -43,13 +43,6 @@ class SenderNetApi {
   protected $configFactory;
 
   /**
-   * The user storage.
-   *
-   * @var \Drupal\user\UserStorageInterface
-   */
-  protected $userStorage;
-
-  /**
    * The config object.
    *
    * @var \Drupal\Core\Config\Config
@@ -78,11 +71,10 @@ class SenderNetApi {
     ConfigFactoryInterface $config_factory
   ) {
     $this->messenger = $messenger;
-    $this->userStorage = $entity_type_manager->getStorage('user');
     $this->client = $client;
     $this->logger = $logger->get('sender_net');
     $this->configFactory = $config_factory;
-    $this->config = $this->configFactory->getEditable('sender_net.settings');
+    $this->config = $this->configFactory->get('sender_net.settings');
   }
 
   /**
@@ -109,7 +101,7 @@ class SenderNetApi {
     $response = $this->makeApiRequest('subscribers', 'POST', $param, $header);
 
     if ($response && $this->isSuccessResponse($response)) {
-      $this->logger->info("@email email is subscribed.", ['@email' => $param['email']]);
+      $this->logger->info("@name email is subscribed.", ['@name' => $param['email']]);
       return TRUE;
     }
 
@@ -179,7 +171,9 @@ class SenderNetApi {
    *   TRUE if the response indicates success, FALSE otherwise.
    */
   protected function isSuccessResponse(ResponseInterface $response) {
-    return $response && $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
+    return $response instanceof ResponseInterface
+      && $response->getStatusCode() >= 200
+      && $response->getStatusCode() < 300;
   }
 
   /**
@@ -188,14 +182,18 @@ class SenderNetApi {
    * @see https://api.sender.net/authentication/
    *
    * @return array|null
-   *   An array containing API headers or NULL if API settings are not set.
+   *   An array containing API header or NULL if API settings are not set.
    */
   public function getApiHeader() {
     // Get the value of the config variable `api_access_tokens`.
-    $token = $this->config->get('api_access_tokens');
+    $api_token = $this->config->get('api_access_tokens');
+    if (empty($api_token)) {
+      $this->logger->error('API access token is missing in configuration.');
+      return NULL;
+    }
 
     return [
-      'Authorization' => 'Bearer ' . $token,
+      'Authorization' => 'Bearer ' . $api_token,
       'Content-Type' => 'application/json',
       'Accept' => 'application/json',
     ];
@@ -204,23 +202,23 @@ class SenderNetApi {
   /**
    * Test the validity of the API key by making a request to a sample endpoint.
    *
+   * @param string $api_token
+   *   The API key to test.
+   *
+   * @return bool
+   *   TRUE if the key is valid, FALSE otherwise.
+   *
    * @throws \Exception
    */
-  public function checkApiKey($api_key) {
+  public function checkApiKey($api_token) {
     // Make a request to a sample endpoint to test the API key.
     $response = $this->makeApiRequest('campaigns', 'GET', [], [
-      'Authorization' => 'Bearer ' . $api_key,
+      'Authorization' => 'Bearer ' . $api_token,
       'Content-Type' => 'application/json',
       'Accept' => 'application/json',
     ]);
 
-    // Check if the response indicates an authentication issue.
-    if ($response && $response->getStatusCode() === 200) {
-      return TRUE;
-    }
-    else {
-      return FALSE;
-    }
+    return $response instanceof ResponseInterface && $response->getStatusCode() === 200;
   }
 
   /**
@@ -232,24 +230,24 @@ class SenderNetApi {
    *   The HTTP method (GET, POST, etc.).
    * @param array $data
    *   An array of data to send in the request body.
-   * @param array $headers
-   *   An array of headers to include in the request.
+   * @param array $header
+   *   An array of header to include in the request.
    *
    * @return \Psr\Http\Message\ResponseInterface|null
    *   The API response object or NULL if there's an issue.
    */
-  protected function makeApiRequest($endpoint, $method, $data, $headers) {
+  protected function makeApiRequest($endpoint, $method, $data, $header) {
     $base_url = $this->config->get('api_base_url');
     $url = $base_url . $endpoint;
 
     try {
       return $this->client->request($method, $url, [
-        'headers' => $headers,
+        'headers' => $header,
         'json' => $data,
       ]);
     }
     catch (\Throwable $th) {
-      $this->logger->error($th->getMessage());
+      $this->logger->error('API request failed: @message', ['@message' => $th->getMessage()]);
       return NULL;
     }
   }

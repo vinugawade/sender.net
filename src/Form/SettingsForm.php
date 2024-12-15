@@ -2,7 +2,6 @@
 
 namespace Drupal\sender_net\Form;
 
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -13,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Configure sender.net settings.
  */
-class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface {
+class SettingsForm extends ConfigFormBase {
 
   /**
    * The sender.net API service.
@@ -88,7 +87,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
       '#type' => 'textarea',
       '#title' => $this->t('Enter your API access token'),
       '#default_value' => $apiKey,
-      '#description' => $this->t('Get API access tokens from sender.net <a href="https://app.sender.net/settings/tokens" target="_blank">account</a>.'),
+      '#description' => $this->t('Get API access tokens from sender.net <a href="@url" target="_blank">account</a>.', ['@url' => 'https://app.sender.net/settings/tokens']),
       '#required' => TRUE,
     ];
 
@@ -96,7 +95,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
       '#type' => 'textfield',
       '#title' => $this->t('Base URL'),
       '#default_value' => 'https://api.sender.net/v2/',
-      '#description' => $this->t('Get Base URL from sender.net <a href="https://api.sender.net/#introduction" target="_blank">docs</a>.'),
+      '#description' => $this->t('Get Base URL from sender.net <a href="@url" target="_blank">docs</a>.', ['@url' => 'https://api.sender.net/#introduction']),
       '#required' => TRUE,
     ];
 
@@ -106,7 +105,7 @@ class SettingsForm extends ConfigFormBase implements ContainerInjectionInterface
       '#options' => $this->loadGroupsOptions($apiKey),
       '#default_value' => $group ?: [],
       '#sort_options' => TRUE,
-      '#description' => $this->t('List of all <a href="https://app.sender.net/subscribers/tags" target="_blank">groups</a> in your sender.net account.'),
+      '#description' => $this->t('List of all <a href="@url" target="_blank">groups</a> in your sender.net account.', ['@url' => 'https://app.sender.net/subscribers/tags']),
       '#required' => FALSE,
       '#multiple' => TRUE,
       '#prefix' => '<div id="user-group-wrapper">',
