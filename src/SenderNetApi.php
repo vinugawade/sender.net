@@ -68,7 +68,7 @@ class SenderNetApi {
     EntityTypeManagerInterface $entity_type_manager,
     ClientInterface $client,
     LoggerChannelFactoryInterface $logger,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
   ) {
     $this->messenger = $messenger;
     $this->client = $client;

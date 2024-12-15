@@ -45,7 +45,7 @@ class SettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger channel factory.
    */
-  public function __construct(SenderNetApi $senderApi, MessengerInterface $messenger, LoggerChannelFactoryInterface $logger) {
+  public function __construct(SenderNetApi $senderApi, MessengerInterface $messenger, LoggerChannelFactoryInterface $logger,) {
     $this->senderApi = $senderApi;
     $this->messenger = $messenger;
     $this->logger = $logger->get('sender_net');

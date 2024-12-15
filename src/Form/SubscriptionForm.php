@@ -37,7 +37,7 @@ class SubscriptionForm extends FormBase {
    */
   public function __construct(
     SenderNetApi $senderApi,
-    EntityTypeManagerInterface $entityTypeManager
+    EntityTypeManagerInterface $entityTypeManager,
   ) {
     $this->senderApi = $senderApi;
     $this->entityTypeManager = $entityTypeManager;
