@@ -188,8 +188,7 @@ class SenderNetApi {
     // Get the value of the config variable `api_access_tokens`.
     $api_token = $this->config->get('api_access_tokens');
     if (empty($api_token)) {
-      $this->logger->error('API access token is missing in configuration.');
-      return NULL;
+      throw new \Exception('API access token is missing in configuration.');
     }
 
     return [
@@ -247,6 +246,7 @@ class SenderNetApi {
       ]);
     }
     catch (\Throwable $th) {
+      watchdog_exception('sender_net', $th);
       $this->logger->error('API request failed: @message', ['@message' => $th->getMessage()]);
       return NULL;
     }

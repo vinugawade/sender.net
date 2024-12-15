@@ -175,8 +175,8 @@ class SettingsForm extends ConfigFormBase {
         }
       }
       catch (\Exception $e) {
+        watchdog_exception('sender_net', $e);
         $this->messenger->addError($this->t('Unable to load groups. Please check your API access token and try again.'));
-        $this->logger->error('Error loading groups: @error', ['@error' => $e->getMessage()]);
       }
     }
     return $options;
