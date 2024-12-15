@@ -6,3 +6,20 @@ sender_net.settings:
     api_access_tokens:
       type: string
       label: 'Enter your API access token'
+      description: 'API access tokens used to authenticate with the Sender.net API.'
+      required: false
+    api_base_url:
+      type: string
+      label: 'API Base URL'
+      description: 'The base URL for the Sender.net API. Default is https://api.sender.net/v2/'
+      default: 'https://api.sender.net/v2/'
+      required: true
+    user_group:
+      type: list
+      label: 'User group'
+      description: 'List of user groups associated with the subscription.'
+      default: []
+      required: false
+      elements:
+        type: string
+        label: 'User Group'
