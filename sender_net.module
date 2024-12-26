@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Sender.net module implementation.
+ * Hook implementations for the Sender.net Integration module.
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
