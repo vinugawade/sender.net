@@ -2,9 +2,11 @@
 
 namespace Drupal\sender_net\Form;
 
+use Drupal\Component\Utility\Error;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\sender_net\SenderNetApi;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -87,7 +89,7 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'textarea',
       '#title' => $this->t('Enter your API access token'),
       '#default_value' => $apiKey,
-      '#description' => $this->t('Get API access tokens from sender.net <a href="@url" target="_blank">account</a>.', ['@url' => 'https://app.sender.net/settings/tokens']),
+      '#description' => $this->t('Get API access tokens from sender.net <a href=":url" target="_blank">account</a>.', [':url' => 'https://app.sender.net/settings/tokens']),
       '#required' => TRUE,
     ];
 
@@ -175,7 +177,11 @@ class SettingsForm extends ConfigFormBase {
         }
       }
       catch (\Exception $e) {
-        watchdog_exception('sender_net', $e);
+        $this->logger->log(
+          RfcLogLevel::ERROR,
+          '%type: @message in %function (line %line of %file).',
+          Error::decodeException($e)
+        );
         $this->messenger->addError($this->t('Unable to load groups. Please check your API access token and try again.'));
       }
     }

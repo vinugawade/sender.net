@@ -246,7 +246,6 @@ class SenderNetApi {
       ]);
     }
     catch (\Throwable $th) {
-      watchdog_exception('sender_net', $th);
       $this->logger->error('API request failed: @message', ['@message' => $th->getMessage()]);
       return NULL;
     }
