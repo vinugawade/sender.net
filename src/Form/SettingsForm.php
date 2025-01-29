@@ -2,7 +2,7 @@
 
 namespace Drupal\sender_net\Form;
 
-use Drupal\Component\Utility\Error;
+use Drupal\Core\Utility\Error;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;

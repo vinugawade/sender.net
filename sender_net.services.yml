@@ -1,4 +1,4 @@
 services:
   sender_net.api:
     class: Drupal\sender_net\SenderNetApi
-    arguments: ['@messenger', '@entity_type.manager', '@http_client', '@logger.factory', '@config.factory']
+    arguments: ['@messenger', '@http_client', '@logger.factory', '@config.factory']

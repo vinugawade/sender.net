@@ -3,7 +3,6 @@
 namespace Drupal\sender_net;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use GuzzleHttp\ClientInterface;
@@ -29,9 +28,9 @@ class SenderNetApi {
   protected $client;
 
   /**
-   * The logger channel factory.
+   * The logger for the 'sender_net'.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   * @var \Psr\Log\LoggerInterface
    */
   protected $logger;
 
@@ -54,25 +53,22 @@ class SenderNetApi {
    *
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
    * @param \GuzzleHttp\ClientInterface $client
    *   The HTTP client.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger channel factory.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
    */
   public function __construct(
     MessengerInterface $messenger,
-    EntityTypeManagerInterface $entity_type_manager,
     ClientInterface $client,
-    LoggerChannelFactoryInterface $logger,
+    LoggerChannelFactoryInterface $logger_factory,
     ConfigFactoryInterface $config_factory,
   ) {
     $this->messenger = $messenger;
     $this->client = $client;
-    $this->logger = $logger->get('sender_net');
+    $this->logger = $logger_factory->get('sender_net');
     $this->configFactory = $config_factory;
     $this->config = $this->configFactory->get('sender_net.settings');
   }
